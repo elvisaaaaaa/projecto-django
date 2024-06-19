@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Blog</h1>
+
+    <ul>
+        {% for post in posts %}
+            <li>
+                <h2><a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a></h2>
+                <p>{{ post.content | truncatewords:50 }}</p>
+                <small>Publicado el {{ post.publication_date|date }}</small>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="categories">
+        <h2>Categorías</h2>
+        <ul>
+            {% for category in categories %}
+                <li><a href="{% url 'blog:category_posts' category.name %}">{{ category.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
