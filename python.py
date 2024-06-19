@@ -1,23 +1,17 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-class Product(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    stock = models.PositiveIntegerField()
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField()
 
-class Category(models.Model):
-    name = models.CharField(max_length=50)
+class Post(models.Model):
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    content = models.TextField()
+    publication_date = models.DateTimeField(auto_now_add=True)
 
-class Order(models.Model):
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    order_date = models.DateTimeField(auto_now_add=True)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
-
-class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
-    unit_price = models.DecimalField(max_digits=10, decimal_places=2)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2) 
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    content = models.TextField()
+    publication_date = models.DateTimeField(
